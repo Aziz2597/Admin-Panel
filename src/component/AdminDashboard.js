@@ -8,12 +8,14 @@ import PortfolioManagement from './PortfolioManagement';
 import EventsManagement from './EventsManagement';
 import ContactInfoManagement from './ContactInfoManagement';
 import FooterManagement from './FooterManagement';
+import KeyFeaturesManagement from './KeyFeaturesManagement';
 
 const AdminDashboard = () => {
   return (
     <div className="admin-dashboard">
       <HeaderManagement />
       <HeroSectionEditor />
+      <KeyFeaturesManagement />
       <AboutUsSnapshotManagement />
       <TestimonialsManagement />
       <StatisticsManagement />

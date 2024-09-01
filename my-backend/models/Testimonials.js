@@ -1,9 +1,11 @@
 const mongoose = require('mongoose');
 
-const TestimonialSchema = new mongoose.Schema({
-  name: String,
-  testimonial: String,
+const testimonialSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  position: { type: String, required: true },
+  text: { type: String, required: true },
+  photo: { type: String, required: false }, 
   date: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Testimonial', TestimonialSchema);
+module.exports = mongoose.model('Testimonial', testimonialSchema);

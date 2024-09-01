@@ -1,3 +1,32 @@
+/* src/styles/app.css */
+.homepage {
+  padding: 20px;
+  font-family: Arial, sans-serif;
+}
+
+.homepage h1 {
+  text-align: center;
+}
+
+.homepage ul {
+  list-style-type: none;
+  padding: 0;
+}
+
+.homepage li {
+  margin: 10px 0;
+}
+
+.homepage a {
+  text-decoration: none;
+  color: #007bff;
+  font-size: 18px;
+}
+
+.homepage a:hover {
+  text-decoration: underline;
+}
+
 .App {
     font-family: Arial, sans-serif;
     padding: 20px;

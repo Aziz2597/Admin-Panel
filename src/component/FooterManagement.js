@@ -1,94 +1,84 @@
-import React, { useState } from 'react';
+import React from 'react';
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import { FaFacebookF, FaTwitter, FaLinkedinIn, FaInstagram } from 'react-icons/fa';
 
-const FooterManagement = () => {
-  const [footer, setFooter] = useState({
-    additionalLinks: ['Privacy Policy', 'Terms of Service'],
-    socialMediaLinks: {
-      facebook: 'https://facebook.com/example',
-      twitter: 'https://twitter.com/example',
-      linkedin: 'https://linkedin.com/company/example',
-    },
-    newsletterSignup: true,
-  });
+const FooterContainer = styled.footer`
+  background-color: #333;
+  color: #fff;
+  padding: 20px;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+`;
 
-  const handleLinkChange = (index, value) => {
-    const updatedLinks = [...footer.additionalLinks];
-    updatedLinks[index] = value;
-    setFooter({ ...footer, additionalLinks: updatedLinks });
-  };
+const Section = styled.div`
+  flex: 1;
+  min-width: 200px;
+  margin: 10px;
+`;
 
-  const handleSocialMediaChange = (platform, value) => {
-    setFooter({
-      ...footer,
-      socialMediaLinks: { ...footer.socialMediaLinks, [platform]: value }
-    });
-  };
+const Title = styled.h4`
+  margin-bottom: 10px;
+  font-size: 1.2em;
+`;
 
-  const handleNewsletterChange = () => {
-    setFooter({ ...footer, newsletterSignup: !footer.newsletterSignup });
-  };
+const List = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 0;
+`;
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    // Here you would typically send the data to the server
-    console.log('Submitted Footer Data:', footer);
-    alert('Footer updated successfully!');
-  };
+const ListItem = styled.li`
+  margin-bottom: 8px;
+`;
 
+const SocialIcons = styled.div`
+  display: flex;
+  gap: 10px;
+  font-size: 1.5em;
+`;
+
+const Footer = () => {
   return (
-    <div className="footer-management">
-      <h2>Footer Management</h2>
-      <form onSubmit={handleSubmit}>
-        <div className="form-group">
-          <label>Additional Links:</label>
-          {footer.additionalLinks.map((link, index) => (
-            <div key={index}>
-              <input
-                type="text"
-                value={link}
-                onChange={(e) => handleLinkChange(index, e.target.value)}
-                placeholder={`Link ${index + 1}`}
-              />
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={() => setFooter({ ...footer, additionalLinks: [...footer.additionalLinks, ''] })}
-          >
-            Add Link
-          </button>
-        </div>
-
-        <div className="form-group">
-          <label>Social Media Links:</label>
-          {Object.keys(footer.socialMediaLinks).map((platform) => (
-            <div key={platform}>
-              <label>{platform.charAt(0).toUpperCase() + platform.slice(1)} URL:</label>
-              <input
-                type="url"
-                value={footer.socialMediaLinks[platform]}
-                onChange={(e) => handleSocialMediaChange(platform, e.target.value)}
-                placeholder={`Enter ${platform} URL`}
-              />
-            </div>
-          ))}
-        </div>
-
-        <div className="form-group">
-          <label>
-            <input
-              type="checkbox"
-              checked={footer.newsletterSignup}
-              onChange={handleNewsletterChange}
-            />
-            Enable Newsletter Signup
-          </label>
-        </div>
-
-        <button type="submit">Save Changes</button>
-      </form>
-    </div>
+    <FooterContainer>
+      <Section>
+        <Title>Contact Us</Title>
+        <p>Phone: +123 456 7890</p>
+        <p>Email: contact@example.com</p>
+        <p>Address: 123 Main Street, Anytown, USA</p>
+      </Section>
+      <Section>
+        <Title>Quick Links</Title>
+        <List>
+          <ListItem><Link to="/about">About Us</Link></ListItem>
+          <ListItem><Link to="/services">Services</Link></ListItem>
+          <ListItem><Link to="/contact">Contact Us</Link></ListItem>
+          <ListItem><Link to="/privacy">Privacy Policy</Link></ListItem>
+        </List>
+      </Section>
+      <Section>
+        <Title>Follow Us</Title>
+        <SocialIcons>
+          <a href="https://facebook.com" target="_blank" rel="noopener noreferrer"><FaFacebookF /></a>
+          <a href="https://twitter.com" target="_blank" rel="noopener noreferrer"><FaTwitter /></a>
+          <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer"><FaLinkedinIn /></a>
+          <a href="https://instagram.com" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+        </SocialIcons>
+      </Section>
+      <Section>
+        <Title>Recent Posts</Title>
+        <List>
+          <ListItem><Link to="/post/1">Post Title 1</Link></ListItem>
+          <ListItem><Link to="/post/2">Post Title 2</Link></ListItem>
+          <ListItem><Link to="/post/3">Post Title 3</Link></ListItem>
+        </List>
+      </Section>
+      <Section style={{ textAlign: 'center' }}>
+        <p>&copy; {new Date().getFullYear()} Your Company. All rights reserved.</p>
+      </Section>
+    </FooterContainer>
   );
 };
 
-export default FooterManagement;
+export default Footer;

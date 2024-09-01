@@ -1,42 +1,81 @@
 const express = require('express');
 const router = express.Router();
-const HeaderManagement = require('../models/HeaderManagement'); // Ensure this matches the model file
+const Header = require('../models/Header');
 
-// Get all menu items
+// GET all headers
 router.get('/', async (req, res) => {
   try {
-    const items = await HeaderManagement.find(); // Use HeaderManagement here
-    res.json(items);
+    const headers = await Header.find();
+    res.json(headers);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Add a new menu item
+// POST a new header or update existing ones
 router.post('/', async (req, res) => {
-  const newItem = new HeaderManagement({ name: req.body.name }); // Use HeaderManagement here
+  const headers = req.body;
+
+  if (!Array.isArray(headers) || headers.some(header => !header.name || !header.route)) {
+    return res.status(400).json({ error: 'Invalid input format' });
+  }
+
   try {
-    const savedItem = await newItem.save();
-    res.json(savedItem);
+    // Clear existing headers and insert new ones
+    await Header.deleteMany({});
+    const result = await Header.insertMany(headers);
+    res.status(200).json({ message: 'Headers updated successfully', data: result });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
-// Update a menu item
-router.put('/:id', async (req, res) => {
+// PUT to update all headers (if needed)
+router.put('/', async (req, res) => {
   try {
-    const updatedItem = await HeaderManagement.findByIdAndUpdate(
-      req.params.id,
-      { name: req.body.name },
-      { new: true }
-    ); // Use HeaderManagement here
-    if (!updatedItem) {
-      return res.status(404).json({ message: 'Item not found' });
-    }
-    res.json(updatedItem);
+    await Header.deleteMany({});
+    await Header.insertMany(req.body);
+    res.status(200).json({ message: 'Headers updated successfully' });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// DELETE a header by id (if needed)
+router.delete('/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    await Header.findByIdAndDelete(id);
+    res.status(200).json({ message: 'Header deleted successfully' });
+  } catch (error) {
+    res.status(500).json({ error: 'Server error' });
+  }
+});
+
+// PUT update a specific header by ID
+router.put('/:id', async (req, res) => {
+  const { id } = req.params;
+  const { name, route } = req.body;
+
+  if (!name || !route) {
+    return res.status(400).json({ error: 'Name and route are required' });
+  }
+
+  try {
+    const updatedHeader = await Header.findByIdAndUpdate(
+      id,
+      { name, route },
+      { new: true }
+    );
+
+    if (!updatedHeader) {
+      return res.status(404).json({ error: 'Header not found' });
+    }
+
+    res.status(200).json({ message: 'Header updated successfully', data: updatedHeader });
+  } catch (error) {
+    console.error('Server error:', error);
+    res.status(500).json({ error: 'Server error' });
   }
 });
 
